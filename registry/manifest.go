@@ -8,7 +8,7 @@ import (
 	"github.com/docker/distribution"
 	"github.com/docker/distribution/manifest/schema1"
 	"github.com/docker/distribution/manifest/schema2"
-	digest "github.com/opencontainers/go-digest"
+	"github.com/opencontainers/go-digest"
 )
 
 func (registry *Registry) Manifest(repository, reference string) (*schema1.SignedManifest, error) {
@@ -74,6 +74,11 @@ func (registry *Registry) ManifestDigest(repository, reference string) (digest.D
 	url := registry.url("/v2/%s/manifests/%s", repository, reference)
 	registry.Logf("registry.manifest.head url=%s repository=%s reference=%s", url, repository, reference)
 
+	req, err := http.NewRequest("HEAD", url, nil)
+	if err != nil {
+		return "", err
+	}
+	req.Header.Set("Accept", schema2.MediaTypeManifest)
 	resp, err := registry.Client.Head(url)
 	if resp != nil {
 		defer resp.Body.Close()
