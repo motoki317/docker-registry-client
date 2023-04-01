@@ -79,7 +79,7 @@ func (registry *Registry) ManifestDigest(repository, reference string) (digest.D
 		return "", err
 	}
 	req.Header.Set("Accept", schema2.MediaTypeManifest)
-	resp, err := registry.Client.Head(url)
+	resp, err := registry.Client.Do(req)
 	if resp != nil {
 		defer resp.Body.Close()
 	}
