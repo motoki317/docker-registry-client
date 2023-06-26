@@ -33,7 +33,7 @@ func (registry *Registry) getPaginatedJSON(url string, response interface{}) (st
 		return "", err
 	}
 	if strings.HasPrefix(next, "/") {
-		next = registry.url(next)
+		next = registry.URL + next
 	}
 	return next, nil
 }
